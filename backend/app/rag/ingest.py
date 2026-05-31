@@ -2,13 +2,14 @@ import uuid
 from pathlib import Path
 from typing import List
 
-import chormadb
+import chromadb
 from openai import OpenAI
 from pypdf import PdfReader
 
+from backend.app.rag.embeddings import embed_texts
 from backend.app.core.config import settings
 
-client = OpenAI(api_key=settings.openai_api_key )
+client = OpenAI(api_key=settings.openai_api_key)
 
 def read_txt(path: Path) -> str:
     return path.read_text(encoding="utf-8")
@@ -48,14 +49,6 @@ def chunk_text(text: str) -> List[str]:
         start = end - settings.chunk_overlap
 
     return chunks
-
-def embed_texts(texts: List[str]) -> List[List[float]]:
-    response = client.embeddings.create(
-        model=settings.embedding_model,
-        input=texts,
-    )
-
-    return [item.embedding for item in response.data]
 
 def get_collection():
     settings.chroma_dir.mkdir(parents=True, exist_ok=True)
