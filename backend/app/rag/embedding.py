@@ -1,5 +1,3 @@
-# backend/app/rag/embeddings.py
-
 from typing import List
 
 from openai import OpenAI
